@@ -8,24 +8,26 @@ items = []
 
 
 class Item(Resource):
+
     def get(self, name):
-        for item in items:
-            if item['name'] == name:
-                return item
-        return {"message": "no item"},404
-
-
+        item = next(filter(lambda x: x['name'] == name, items), None)
+        return {"item": item}, 200 if item else 404
 
 
 class ItemList(Resource):
     def get(self):
-        return {"items":items}
+        return {"items": items}
+
     def post(self):
         req = request.get_json()
-        item = {'name': req['name'], 'price': req['price']}
-        items.append(item)
-        return item , 201
+        if next(filter(lambda x: x['name'] == req['name'], items), None) is None:
+            item = {'name': req['name'], 'price': req['price']}
+            items.append(item)
+            return item, 201
+        else:
+            return {"message": 'name already exists'}
+
 
 api.add_resource(Item, '/item/<string:name>')
-api.add_resource(ItemList,'/item')
-app.run(port=3001 , debug=True)
+api.add_resource(ItemList, '/item')
+app.run(port=3001, debug=True)

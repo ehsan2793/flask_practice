@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
 from flask_restful import Resource, Api
 
+
 app = Flask(__name__)
+app.secret_key = 'I am the secret'
 api = Api(app)
 
 items = []

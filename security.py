@@ -2,14 +2,14 @@ from user import User
 from werkzeug.security import check_password_hash
 
 
-users = [User(1, "bob", '1234')]
+users = [User(1, "bob", "1234")]
 
 username_mapping = {u.username: u for u in users}
 userid_mapping = {u.id: u for u in users}
 
 def authenticate(username, password):
     user = username_mapping.get(username, None)
-    if user and check_password_hash(user.password , password):
+    if user and user.password == password:
         return user
 
 
